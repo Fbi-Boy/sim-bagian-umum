@@ -1,0 +1,14 @@
+<?php
+namespace App\Modules\Inventory\Models;
+use App\Modules\Organization\Models\OrganizationalUnit;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+class Location extends Model {
+    protected $fillable = ['parent_id','organizational_unit_id','code','name','location_type','address_detail','is_active'];
+    protected $casts = ['is_active'=>'boolean'];
+    public function parent(): BelongsTo { return $this->belongsTo(self::class,'parent_id'); }
+    public function children(): HasMany { return $this->hasMany(self::class,'parent_id'); }
+    public function organizationalUnit(): BelongsTo { return $this->belongsTo(OrganizationalUnit::class); }
+    public function assets(): HasMany { return $this->hasMany(Asset::class); }
+}
